@@ -118,6 +118,7 @@ bool SquareMat::areOutOfBounds(int i, int j)
     }
     return true;
 }
+// Helper function to print matrix:
 void SquareMat::printMatrix() const
 {
     for (int i = 0; i < n; i++)
@@ -128,4 +129,104 @@ void SquareMat::printMatrix() const
         }
         cout << endl;
     }
+}
+
+//Function to add two matrices:
+SquareMat SquareMat::operator+(const SquareMat &other_sm) const
+{
+    if (this->n != other_sm.n)
+    {
+        throw "Matrices are not the same size.";
+    }
+
+    SquareMat result(this->n); // Create a new matrix to store the result
+
+    for (int i = 0; i < this->n; i++)
+    {
+        for (int j = 0; j < this->n; j++)
+        {
+            result.data[i][j] = this->data[i][j] + other_sm.data[i][j];
+        }
+    }
+    return result;
+}
+
+//Function to subtract two matrices:
+SquareMat SquareMat::operator-(const SquareMat &other_sm) const
+{
+    if (this->n != other_sm.n)
+    {
+        throw "Matrices are not the same size.";
+    }
+
+    SquareMat result(this->n); // Create a new matrix to store the result
+
+    for (int i = 0; i < this->n; i++)
+    {
+        for (int j = 0; j < this->n; j++)
+        {
+            result.data[i][j] = this->data[i][j] - other_sm.data[i][j];
+        }
+    }
+    return result;
+}
+
+//Function to negate a matrix:
+SquareMat SquareMat::operator-() const
+{
+    SquareMat result(this->n); // Create a new matrix to store the result
+
+    for (int i = 0; i < this->n; i++)
+    {
+        for (int j = 0; j < this->n; j++)
+        {
+            result.data[i][j] = -this->data[i][j];
+        }
+    }
+    return result;
+}
+
+//Function to multiply two matrices(O(n^3)):
+SquareMat SquareMat::operator*(const SquareMat &other_sm) const
+{
+    if (this->n != other_sm.n)
+    {
+        throw "Matrices are not the same size.";
+    }
+
+    SquareMat result(this->n); // Create a new matrix to store the result
+
+    for (int i = 0; i < this->n; i++)
+    {
+        for (int j = 0; j < this->n; j++)
+        {
+            result.data[i][j] = 0;
+            for (int k = 0; k < this->n; k++)
+            {
+                result.data[i][j] = result.data[i][j] + (this->data[i][k] * other_sm.data[k][j]);
+            }
+        }
+    }
+    return result;
+}
+
+//Member function to multiply a matrix by a scalar (matrix * scalar):
+SquareMat SquareMat::operator*(int scalar) const
+{
+    SquareMat result(this->n); // Create a new matrix to store the result
+
+    for (int i = 0; i < this->n; i++)
+    {
+        for (int j = 0; j < this->n; j++)
+        {
+            result.data[i][j] = this->data[i][j] * scalar;
+        }
+    }
+    return result;
+}
+
+// Non-member function to multiply by a scalar (scalar * matrix):
+SquareMat operator*(int scalar, const SquareMat &matrix)
+{
+    return matrix * scalar; // Reuse the member function (:
 }
