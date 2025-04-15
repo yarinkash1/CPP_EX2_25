@@ -11,8 +11,8 @@ test: $(TEST_TARGET)
 main: $(TARGET)
 	./$(TARGET)
 
-$(TARGET): main.o 
-	$(CXX) $(CXXFLAGS) -o $(TARGET) main.o 
+$(TARGET): main.o SquareMat.o
+	$(CXX) $(CXXFLAGS) -o $(TARGET) main.o SquareMat.o
 
 $(TEST_TARGET): SquareMatTest.o SquareMat.o
 	$(CXX) $(CXXFLAGS) -o $(TEST_TARGET) SquareMatTest.o SquareMat.o
