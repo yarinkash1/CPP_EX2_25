@@ -34,6 +34,8 @@ namespace mat_ns
         SquareMat operator-() const; // Unary minus operator (negation)
         SquareMat operator*(const SquareMat &other_sm) const; // Multiplication operator
         SquareMat operator*(int scalar) const; // Member function to multiply by a scalar (matrix * scalar)
+        SquareMat operator%(const SquareMat &other_sm) const; // Element-wise multiplication operator
+        SquareMat operator%(int scalar) const; // Modulo operator with scalar: applies modulo to each element in the matrix (element % scalar)
     };
     SquareMat operator*(int scalar, const SquareMat &matrix); // Non-member function to multiply by a scalar (scalar * matrix)
 }

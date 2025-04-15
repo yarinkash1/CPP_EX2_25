@@ -230,3 +230,38 @@ SquareMat operator*(int scalar, const SquareMat &matrix)
 {
     return matrix * scalar; // Reuse the member function (:
 }
+
+//Function to multiply two matrices element-wise:
+SquareMat SquareMat::operator%(const SquareMat &other_sm) const
+{
+    if (this->n != other_sm.n)
+    {
+        throw "Matrices are not the same size.";
+    }
+
+    SquareMat result(this->n); // Create a new matrix to store the result
+
+    for(int i=0; i<this->n; i++)
+    {
+        for(int j=0; j<this->n; j++)
+        {
+            result.data[i][j] = this->data[i][j] * other_sm.data[i][j];
+        }
+    }
+    return result;
+}
+
+//Function to apply modulo to each element in the matrix (element % scalar):
+SquareMat SquareMat::operator%(int scalar) const
+{
+    SquareMat result(this->n); // Create a new matrix to store the result
+
+    for (int i = 0; i < this->n; i++)
+    {
+        for (int j = 0; j < this->n; j++)
+        {
+            result.data[i][j] = this->data[i][j] % scalar;
+        }
+    }
+    return result;
+}
