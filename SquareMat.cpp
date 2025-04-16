@@ -119,15 +119,15 @@ bool SquareMat::areOutOfBounds(int i, int j)
     return true;
 }
 // Helper function to print matrix:
-void SquareMat::printMatrix() const
+void SquareMat::printMatrix(ostream& os) const
 {
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
         {
-            cout << data[i][j] << " ";
+            os << data[i][j] << " ";
         }
-        cout << endl;
+        os << endl;
     }
 }
 
@@ -509,4 +509,120 @@ int SquareMat::operator!() const
         }
         return det;
     }
+}
+
+// Output operator: prints the matrix to the console
+ostream &operator<<(ostream &os, const SquareMat &matrix)
+{
+    matrix.printMatrix(os);
+    return os;
+}
+
+// Adds another matrix to this matrix
+// This function modifies the current matrix (this) by adding another matrix (other_sm) to it
+SquareMat &SquareMat::operator+=(const SquareMat &other_sm)
+{
+    if (this->n != other_sm.n)
+    {
+        throw "Matrices are not the same size.";
+    }
+
+    for (int i = 0; i < this->n; i++)
+    {
+        for (int j = 0; j < this->n; j++)
+        {
+            this->data[i][j] += other_sm.data[i][j];
+        }
+    }
+    return *this;
+}
+
+// Subtracts another matrix from this matrix:
+// This function modifies the current matrix (this) by subtracting another matrix (other_sm) from it
+SquareMat &SquareMat::operator-=(const SquareMat &other_sm)
+{
+    if (this->n != other_sm.n)
+    {
+        throw "Matrices are not the same size.";
+    }
+
+    for (int i = 0; i < this->n; i++)
+    {
+        for (int j = 0; j < this->n; j++)
+        {
+            this->data[i][j] -= other_sm.data[i][j];
+        }
+    }
+    return *this;
+}
+
+// Multiplies this matrix by another matrix:
+// This function modifies the current matrix (this) by multiplying it with another matrix (other)
+SquareMat &SquareMat::operator*=(const SquareMat &other_sm)
+{
+    if (this->n != other_sm.n)
+    {
+        throw "Matrices are not the same size.";
+    }
+
+    SquareMat result(this->n); // Create a new matrix to store the result
+
+    for (int i = 0; i < this->n; i++) // for each row in A
+    {
+        for (int j = 0; j < this->n; j++) // for each column in B
+        {
+            result.data[i][j] = 0;
+            for (int k = 0; k < this->n; k++) // For the dot product
+            {
+                result.data[i][j] = result.data[i][j] + (this->data[i][k] * other_sm.data[k][j]);
+            }
+        }
+    }
+    *this = result; // Update the current matrix with the result
+    return *this;
+}
+
+// Divides this matrix by another matrix:
+// This function modifies the current matrix (this) by dividing it with another matrix (other)
+SquareMat &SquareMat::operator/=(const SquareMat &other_sm)
+{
+    if (this->n != other_sm.n)
+    {
+        throw "Matrices are not the same size.";
+    }
+
+    SquareMat result(this->n); // Create a new matrix to store the result
+
+    for (int i = 0; i < this->n; i++)
+    {
+        for (int j = 0; j < this->n; j++)
+        {
+            if (other_sm.data[i][j] == 0)
+            {
+                throw "Division by zero.";
+            }
+            result.data[i][j] = this->data[i][j] / other_sm.data[i][j];
+        }
+    }
+    *this = result; // Update the current matrix with the result
+    return *this;
+}
+
+// Applies element-wise modulo operation between this matrix and another matrix:
+// This function modifies the current matrix (this) by applying modulo operation with another matrix (other)
+SquareMat &SquareMat::operator%=(const SquareMat &other_sm)
+{
+    if (this->n != other_sm.n)
+    {
+        throw "Matrices are not the same size.";
+    }
+
+    for (int i = 0; i < this->n; i++)
+    {
+        for (int j = 0; j < this->n; j++)
+        {
+            this->data[i][j] %= other_sm.data[i][j];
+        }
+    }
+    return *this;
 }
