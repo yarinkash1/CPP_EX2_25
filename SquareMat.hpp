@@ -42,9 +42,9 @@ namespace mat_ns
         SquareMat operator%(int scalar) const;                            // Modulo operator with scalar: applies modulo to each element in the matrix (element % scalar)
         SquareMat operator/(int scalar) const;                            // Division operator with scalar: applies division to each element in the matrix (element / scalar)
         SquareMat operator^(int scalar) const;                            // Unary power operator: multiply the matrix by itself 'scalar' times
-        SquareMat &SquareMat::operator++();                               // Pre-increment operator: increment each element in the matrix by 1
+        SquareMat& operator++();                               // Pre-increment operator: increment each element in the matrix by 1
         SquareMat operator++(int);                                        // Post-increment operator: increment each element in the matrix by 1
-        SquareMat &SquareMat::operator--();                               // Pre-decrement operator: decrement each element in the matrix by 1
+        SquareMat& operator--();                               // Pre-decrement operator: decrement each element in the matrix by 1
         SquareMat operator--(int);                                        // Post-decrement operator: decrement each element in the matrix by 1
         SquareMat operator~() const;                                      // Transpose operator: transpose the matrix
         int *operator[](int i);                                           // For write access (non-const)
