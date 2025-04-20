@@ -1,3 +1,4 @@
+//yarinkash1@gmail.com
 #include <iostream>
 #include "SquareMat.hpp"
 using namespace mat_ns;
