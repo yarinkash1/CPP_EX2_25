@@ -4,6 +4,11 @@ using namespace mat_ns;
 
 SquareMat::SquareMat(int dimension) : n(dimension) // Initializer list constructor
 {
+    if (dimension <= 0)
+    {
+        throw "Dimension must be greater than 0.";
+    }
+
     data = new int *[n]; // Allocate an array the size of the input dimension
 
     // Allocate each row with n columns(n x n size matrix):
@@ -119,7 +124,7 @@ bool SquareMat::areOutOfBounds(int i, int j)
     return true;
 }
 // Helper function to print matrix:
-void SquareMat::printMatrix(ostream& os) const
+void SquareMat::printMatrix(ostream &os) const
 {
     for (int i = 0; i < n; i++)
     {
@@ -226,9 +231,12 @@ SquareMat SquareMat::operator*(int scalar) const
 }
 
 // Non-member function to multiply by a scalar (scalar * matrix):
-SquareMat operator*(int scalar, const SquareMat &matrix)
+namespace mat_ns
 {
-    return matrix * scalar; // Reuse the member function (:
+    SquareMat operator*(int scalar, const SquareMat &matrix)
+    {
+        return matrix * scalar; // Reuse the member function (:
+    }
 }
 
 // Function to multiply two matrices element-wise:
@@ -300,9 +308,10 @@ SquareMat SquareMat::operator^(int scalar) const
     else
     {
         SquareMat result(this->n); // Create a new matrix to store the result
+        result = *this;            // Initialize result with the current matrix
 
         // Multiply the matrix by itself 'scalar' times:
-        for (int k = 0; k < scalar; k++)
+        for (int k = 1; k < scalar; k++)
         {
             result = result * (*this);
         }
@@ -384,7 +393,7 @@ SquareMat SquareMat::operator~() const
 int *SquareMat::operator[](int i)
 {
     // Check if the index is within bounds:
-    if(i < 0 || i >= n)
+    if (i < 0 || i >= n)
     {
         throw "Index out of bounds.";
     }
@@ -395,7 +404,7 @@ int *SquareMat::operator[](int i)
 const int *SquareMat::operator[](int i) const
 {
     // Check if the index is within bounds:
-    if(i < 0 || i >= n)
+    if (i < 0 || i >= n)
     {
         throw "Index out of bounds.";
     }
@@ -493,31 +502,33 @@ int SquareMat::operator!() const
                 for (int k = 0; k < this->n; k++)
                 {
                     // Exclude the i-th column(no condition for k==i):
-                    if (k < i) 
+                    if (k < i)
                     {
                         subMatrix.data[j - 1][k] = this->data[j][k];
                     }
-                    else if (k > i) 
+                    else if (k > i)
                     {
                         subMatrix.data[j - 1][k - 1] = this->data[j][k];
                     }
                 }
             }
             // Determinant of the minor matrix created by removing row 0 and column i
-            int minor_det = !subMatrix; // Call the operator!() on the submatrix to get its determinant
+            int minor_det = !subMatrix;                                         // Call the operator!() on the submatrix to get its determinant
             det = det + ((i % 2 == 0) ? 1 : -1) * this->data[0][i] * minor_det; // Add or subtract the determinant of the minor matrix(recursive call)
         }
         return det;
     }
 }
 
-// Output operator: prints the matrix to the console
-ostream &operator<<(ostream &os, const SquareMat &matrix)
+// Non member function - output operator: prints the matrix to the console
+namespace mat_ns
 {
-    matrix.printMatrix(os);
-    return os;
+    ostream &operator<<(ostream &os, const SquareMat &matrix)
+    {
+        matrix.printMatrix(os);
+        return os;
+    }
 }
-
 // Adds another matrix to this matrix
 // This function modifies the current matrix (this) by adding another matrix (other_sm) to it
 SquareMat &SquareMat::operator+=(const SquareMat &other_sm)
