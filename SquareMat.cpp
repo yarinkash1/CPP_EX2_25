@@ -9,12 +9,12 @@ SquareMat::SquareMat(int dimension) : n(dimension) // Initializer list construct
         throw "Dimension must be greater than 0.";
     }
 
-    data = new int *[n]; // Allocate an array the size of the input dimension
+    data = new double *[n]; // Allocate an array the size of the input dimension
 
     // Allocate each row with n columns(n x n size matrix):
     for (int i = 0; i < n; i++)
     {
-        data[i] = new int[n];
+        data[i] = new double[n];
 
         // Initialize all matrix values to be zero at first:
         for (int j = 0; j < n; j++)
@@ -38,12 +38,12 @@ SquareMat::~SquareMat() // Destructor
 
 SquareMat::SquareMat(const SquareMat &other_sm) : n(other_sm.n) // Initializer list copy constructor
 {
-    data = new int *[n]; // Allocate an array the size of the input dimension
+    data = new double *[n]; // Allocate an array the size of the input dimension
 
     // Allocate each row with n columns(n x n size matrix):
     for (int i = 0; i < n; i++)
     {
-        data[i] = new int[n];
+        data[i] = new double[n];
 
         // Initialize all matrix values to be the values of the other square matrix passed as an input:
         for (int j = 0; j < n; j++)
@@ -71,12 +71,12 @@ SquareMat &SquareMat::operator=(const SquareMat &other_sm) // Copy assignment op
     n = other_sm.n;
 
     // Reallocating data
-    data = new int *[n];
+    data = new double *[n];
 
     // Allocate and copy:
     for (int i = 0; i < n; i++)
     {
-        data[i] = new int[n];
+        data[i] = new double[n];
 
         // Initialize all matrix values to be the values of the other square matrix passed as an input:
         for (int j = 0; j < n; j++)
@@ -94,7 +94,7 @@ int SquareMat::getSize() const
     return this->n;
 }
 
-void SquareMat::setValue(int i, int j, int value)
+void SquareMat::setValue(int i, int j, double value)
 {
     if (areOutOfBounds(i, j) == false)
     {
@@ -104,7 +104,13 @@ void SquareMat::setValue(int i, int j, int value)
     throw "Indexes are out of bounds.";
 }
 
-int SquareMat::getValue(int i, int j)
+// Function overload to accept int, and implicitly convert to double
+void SquareMat::setValue(int i, int j, int value)
+{
+    setValue(i, j, static_cast<double>(value)); // Cast the int to double and call the main function
+}
+
+double SquareMat::getValue(int i, int j)
 {
     if (areOutOfBounds(i, j) == false)
     {
@@ -130,10 +136,23 @@ void SquareMat::printMatrix(ostream &os) const
     {
         for (int j = 0; j < n; j++)
         {
-            os << data[i][j] << " ";
+            os << data[i][j]; // Print the value directly
+            if (j < n - 1)    // Don't add a tab after the last element in each row
+                os << "\t";
         }
-        os << endl;
+        os << "\n"; // Newline after each row
     }
+}
+
+// Helper function to check for double equality:
+bool SquareMat::isEqual(double a, double b) 
+{
+    return myAbs(a - b) < TOLERANCE;
+}
+// Helper function to calculate absolute value:
+double SquareMat::myAbs(double value) 
+{
+    return (value < 0) ? -value : value;
 }
 
 // Function to add two matrices:
@@ -216,7 +235,7 @@ SquareMat SquareMat::operator*(const SquareMat &other_sm) const
 }
 
 // Member function to multiply a matrix by a scalar (matrix * scalar):
-SquareMat SquareMat::operator*(int scalar) const
+SquareMat SquareMat::operator*(double scalar) const
 {
     SquareMat result(this->n); // Create a new matrix to store the result
 
@@ -233,7 +252,7 @@ SquareMat SquareMat::operator*(int scalar) const
 // Non-member function to multiply by a scalar (scalar * matrix):
 namespace mat_ns
 {
-    SquareMat operator*(int scalar, const SquareMat &matrix)
+    SquareMat operator*(double scalar, const SquareMat &matrix)
     {
         return matrix * scalar; // Reuse the member function (:
     }
@@ -260,7 +279,7 @@ SquareMat SquareMat::operator%(const SquareMat &other_sm) const
 }
 
 // Function to apply modulo to each element in the matrix (element % scalar):
-SquareMat SquareMat::operator%(int scalar) const
+SquareMat SquareMat::operator%(double scalar) const
 {
     SquareMat result(this->n); // Create a new matrix to store the result
 
@@ -268,14 +287,14 @@ SquareMat SquareMat::operator%(int scalar) const
     {
         for (int j = 0; j < this->n; j++)
         {
-            result.data[i][j] = this->data[i][j] % scalar;
+            result.data[i][j] = fmod(this->data[i][j], scalar); // Use fmod for floating-point modulo
         }
     }
     return result;
 }
 
 // Function to apply division to each element in the matrix (element / scalar):
-SquareMat SquareMat::operator/(int scalar) const
+SquareMat SquareMat::operator/(double scalar) const
 {
     if (scalar == 0)
     {
@@ -295,7 +314,7 @@ SquareMat SquareMat::operator/(int scalar) const
 }
 
 // Function to multiply the matrix by itself 'scalar' times:
-SquareMat SquareMat::operator^(int scalar) const
+SquareMat SquareMat::operator^(double scalar) const
 {
     if (scalar < 0)
     {
@@ -390,7 +409,7 @@ SquareMat SquareMat::operator~() const
 }
 
 // Non-const version: allows modification:
-int *SquareMat::operator[](int i)
+double *SquareMat::operator[](int i)
 {
     // Check if the index is within bounds:
     if (i < 0 || i >= n)
@@ -401,7 +420,7 @@ int *SquareMat::operator[](int i)
 }
 
 // Const version: only allows reading:
-const int *SquareMat::operator[](int i) const
+const double *SquareMat::operator[](int i) const
 {
     // Check if the index is within bounds:
     if (i < 0 || i >= n)
@@ -439,8 +458,8 @@ bool SquareMat::operator!=(const SquareMat &other_sm) const
     return !(*this == other_sm); // Reuse the equality operator
 }
 
-// Function to calculate the sum of all elements in the matrix:
-int SquareMat::matrixSum() const
+// Helper function to calculate the sum of all elements in the matrix:
+double SquareMat::matrixSum() const
 {
     int sum = 0;
     for (int i = 0; i < this->n; i++)
@@ -478,7 +497,7 @@ bool SquareMat::operator<=(const SquareMat &other_sm) const
 }
 
 // Function to calculate the determinant of the matrix:
-int SquareMat::operator!() const
+double SquareMat::operator!() const
 {
     if (this->n == 1)
     {
@@ -628,12 +647,14 @@ SquareMat &SquareMat::operator%=(const SquareMat &other_sm)
         throw "Matrices are not the same size.";
     }
 
-    for (int i = 0; i < this->n; i++)
+    // Perform element-wise modulo operation
+    for (int i = 0; i < n; ++i) 
     {
-        for (int j = 0; j < this->n; j++)
+        for (int j = 0; j < n; ++j) 
         {
-            this->data[i][j] %= other_sm.data[i][j];
+            this->data[i][j] = fmod(this->data[i][j], other_sm.data[i][j]);
         }
     }
+
     return *this;
 }

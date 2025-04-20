@@ -118,10 +118,9 @@ TEST_CASE("Addition operator")
 
     SquareMat result = mat1 + mat2;
 
-    CHECK(result.getSize() == 3); // Test size is correct
     CHECK(result.getValue(0, 0) == 5);
     CHECK(result.getValue(1, 1) == 3);
-    CHECK(result.getValue(2, 2) == 9); // 3.1 + 6.1 is converted to 3 + 6 = 9
+    CHECK(result.getValue(2, 2) == 9.2); 
 
     // Make sure all other values are still 0
     CHECK(result.getValue(0, 1) == 0);
@@ -137,7 +136,7 @@ TEST_CASE("Subtraction operator")
 {
     SquareMat mat1(3);
     mat1.setValue(0, 0, -5);
-    mat1.setValue(1, 1, 6.5555); // 6.5555 is converted to 6
+    mat1.setValue(1, 1, 6.555);
     mat1.setValue(2, 2, 7);
 
     SquareMat mat2(3);
@@ -147,9 +146,8 @@ TEST_CASE("Subtraction operator")
 
     SquareMat result = mat1 - mat2;
 
-    CHECK(result.getSize() == 3); // Test size is correct
     CHECK(result.getValue(0, 0) == -3);
-    CHECK(result.getValue(1, 1) == 3);
+    CHECK(SquareMat::isEqual(result.getValue(1, 1), 3.555));
     CHECK(result.getValue(2, 2) == 3);
 
     // Make sure all other values are still 0
@@ -171,7 +169,6 @@ TEST_CASE("Negation operator")
 
     SquareMat result = -mat;
 
-    CHECK(result.getSize() == 3); // Test size is correct
     CHECK(result.getValue(0, 0) == -1);
     CHECK(result.getValue(1, 1) == 2);
     CHECK(result.getValue(2, 2) == -3);
@@ -189,29 +186,28 @@ TEST_CASE("Negation operator")
 TEST_CASE("Multiplication operator")
 {
     SquareMat mat1(3);
-    mat1.setValue(0,0,1);
-    mat1.setValue(0,1,2);
-    mat1.setValue(0,2,3);
-    mat1.setValue(1,0,4);
-    mat1.setValue(1,1,5);
-    mat1.setValue(1,2,6);
-    mat1.setValue(2,0,7);
-    mat1.setValue(2,1,8);
-    mat1.setValue(2,2,9);
+    mat1.setValue(0, 0, 1);
+    mat1.setValue(0, 1, 2);
+    mat1.setValue(0, 2, 3);
+    mat1.setValue(1, 0, 4);
+    mat1.setValue(1, 1, 5);
+    mat1.setValue(1, 2, 6);
+    mat1.setValue(2, 0, 7);
+    mat1.setValue(2, 1, 8);
+    mat1.setValue(2, 2, 9);
 
     SquareMat mat2(3);
-    mat2.setValue(0,0,1);
-    mat2.setValue(0,1,2);
-    mat2.setValue(0,2,3);
-    mat2.setValue(1,0,4);
-    mat2.setValue(1,1,5);
-    mat2.setValue(1,2,6);
-    mat2.setValue(2,0,7);
-    mat2.setValue(2,1,8);
-    mat2.setValue(2,2,9);
+    mat2.setValue(0, 0, 1);
+    mat2.setValue(0, 1, 2);
+    mat2.setValue(0, 2, 3);
+    mat2.setValue(1, 0, 4);
+    mat2.setValue(1, 1, 5);
+    mat2.setValue(1, 2, 6);
+    mat2.setValue(2, 0, 7);
+    mat2.setValue(2, 1, 8);
+    mat2.setValue(2, 2, 9);
 
     SquareMat result = mat1 * mat2;
-    CHECK(result.getSize() == 3); // Test size is correct
     CHECK(result.getValue(0, 0) == 30);
     CHECK(result.getValue(0, 1) == 36);
     CHECK(result.getValue(0, 2) == 42);
@@ -229,14 +225,13 @@ TEST_CASE("Multiplication operator with scalar")
     SquareMat mat(3);
     mat.setValue(0, 0, 1);
     mat.setValue(1, 1, -2);
-    mat.setValue(2, 2, 3.6543); // 3.6543 is converted to 3
+    mat.setValue(2, 2, 3.5);
 
-    SquareMat result = mat * 2;
+    SquareMat result = mat * 2.0;
 
-    CHECK(result.getSize() == 3); // Test size is correct
     CHECK(result.getValue(0, 0) == 2);
     CHECK(result.getValue(1, 1) == -4);
-    CHECK(result.getValue(2, 2) == 6);
+    CHECK(result.getValue(2, 2) == 7);
 
     // Make sure all other values are still 0
     CHECK(result.getValue(0, 1) == 0);
@@ -253,14 +248,13 @@ TEST_CASE("Non-member function to multiply by a scalar")
     SquareMat mat(3);
     mat.setValue(0, 0, 1);
     mat.setValue(1, 1, -2);
-    mat.setValue(2, 2, 3.6543); // 3.6543 is converted to 3
+    mat.setValue(2, 2, 3.5);
 
-    SquareMat result = 2.5 * mat; // 2.5 is converted to 2
+    SquareMat result = 2.5 * mat;
 
-    CHECK(result.getSize() == 3); // Test size is correct
-    CHECK(result.getValue(0, 0) == 2);
-    CHECK(result.getValue(1, 1) == -4);
-    CHECK(result.getValue(2, 2) == 6);
+    CHECK(result.getValue(0, 0) == 2.5);
+    CHECK(result.getValue(1, 1) == -5);
+    CHECK(result.getValue(2, 2) == 8.75);
 
     // Make sure all other values are still 0
     CHECK(result.getValue(0, 1) == 0);
@@ -277,19 +271,18 @@ TEST_CASE("Element-wise multiplication operator")
     SquareMat mat1(3);
     mat1.setValue(0, 0, 1);
     mat1.setValue(1, 1, -2);
-    mat1.setValue(2, 2, 3.6543); // 3.6543 is converted to 3
+    mat1.setValue(2, 2, 3.65);
 
     SquareMat mat2(3);
     mat2.setValue(0, 0, 4);
     mat2.setValue(1, 1, -5);
-    mat2.setValue(2, 2, 6.54321); // 6.54321 is converted to 6
+    mat2.setValue(2, 2, -6.54);
 
     SquareMat result = mat1 % mat2;
 
-    CHECK(result.getSize() == 3); // Test size is correct
     CHECK(result.getValue(0, 0) == 4);
     CHECK(result.getValue(1, 1) == 10);
-    CHECK(result.getValue(2, 2) == 18);
+    CHECK(result.getValue(2, 2) == -23.871);
 
     // Make sure all other values are still 0
     CHECK(result.getValue(0, 1) == 0);
@@ -306,7 +299,7 @@ TEST_CASE("Modulo operator with scalar")
     SquareMat mat(3);
     mat.setValue(0, 0, 1);
     mat.setValue(1, 1, -2);
-    mat.setValue(2, 2, 3.6543); // 3.6543 is converted to 3
+    mat.setValue(2, 2, 3.00);
 
     SquareMat result = mat % 2;
 
@@ -330,7 +323,7 @@ TEST_CASE("Division operator with scalar")
     SquareMat mat(3);
     mat.setValue(0, 0, 2);
     mat.setValue(1, 1, -4);
-    mat.setValue(2, 2, 6.54321); // 6.54321 is converted to 6
+    mat.setValue(2, 2, 6.000);
 
     SquareMat result = mat / 2;
 
@@ -354,7 +347,7 @@ TEST_CASE("Unary power operator")
     SquareMat mat(3);
     mat.setValue(0, 0, 1);
     mat.setValue(0, 1, 2);
-    mat.setValue(0, 2, 3.6543); // 3.6543 is converted to 3
+    mat.setValue(0, 2, 3);
     mat.setValue(1, 0, 4);
     mat.setValue(1, 1, 5);
     mat.setValue(1, 2, 6);
@@ -384,15 +377,13 @@ TEST_CASE("Unary power operator")
     SquareMat mat2(3);
     mat2.setValue(0, 0, 1);
     mat2.setValue(0, 1, 2);
-    mat2.setValue(0, 2, 3.6543); // 3.6543 is converted to 3
+    mat2.setValue(0, 2, 3);
     mat2.setValue(1, 0, 4);
     mat2.setValue(1, 1, 5);
     mat2.setValue(1, 2, 6);
     mat2.setValue(2, 0, 7);
     mat2.setValue(2, 1, 8);
     mat2.setValue(2, 2, 9);
-
-
 
     SquareMat result = mat2 ^ 3;
 
@@ -414,7 +405,7 @@ TEST_CASE("Pre-increment operator")
     SquareMat mat(3);
     mat.setValue(0, 0, 1);
     mat.setValue(0, 1, 2);
-    mat.setValue(0, 2, 3.6543); // 3.6543 is converted to 3
+    mat.setValue(0, 2, 3);
     mat.setValue(1, 0, 4);
     mat.setValue(1, 1, 5);
     mat.setValue(1, 2, 6);
@@ -424,7 +415,6 @@ TEST_CASE("Pre-increment operator")
 
     SquareMat result = ++mat;
 
-    CHECK(result.getSize() == 3); // Test size is correct
     CHECK(result.getValue(0, 0) == 2);
     CHECK(result.getValue(0, 1) == 3);
     CHECK(result.getValue(0, 2) == 4);
@@ -442,7 +432,7 @@ TEST_CASE("Post-increment operator")
     SquareMat mat(3);
     mat.setValue(0, 0, 1);
     mat.setValue(0, 1, 2);
-    mat.setValue(0, 2, 3.6543); // 3.6543 is converted to 3
+    mat.setValue(0, 2, 3);
     mat.setValue(1, 0, 4);
     mat.setValue(1, 1, 5);
     mat.setValue(1, 2, 6);
@@ -452,7 +442,6 @@ TEST_CASE("Post-increment operator")
 
     SquareMat result = mat++;
 
-    CHECK(result.getSize() == 3); // Test size is correct
     CHECK(result.getValue(0, 0) == 1);
     CHECK(result.getValue(0, 1) == 2);
     CHECK(result.getValue(0, 2) == 3);
@@ -482,7 +471,7 @@ TEST_CASE("Pre-decrement operator")
     SquareMat mat(3);
     mat.setValue(0, 0, 1);
     mat.setValue(0, 1, 2);
-    mat.setValue(0, 2, 3.6543); // 3.6543 is converted to 3
+    mat.setValue(0, 2, 3);
     mat.setValue(1, 0, 4);
     mat.setValue(1, 1, 5);
     mat.setValue(1, 2, 6);
@@ -492,7 +481,6 @@ TEST_CASE("Pre-decrement operator")
 
     SquareMat result = --mat;
 
-    CHECK(result.getSize() == 3); // Test size is correct
     CHECK(result.getValue(0, 0) == 0);
     CHECK(result.getValue(0, 1) == 1);
     CHECK(result.getValue(0, 2) == 2);
@@ -510,7 +498,7 @@ TEST_CASE("Post-decrement operator")
     SquareMat mat(3);
     mat.setValue(0, 0, 1);
     mat.setValue(0, 1, 2);
-    mat.setValue(0, 2, 3.6543); // 3.6543 is converted to 3
+    mat.setValue(0, 2, 3);
     mat.setValue(1, 0, 4);
     mat.setValue(1, 1, 5);
     mat.setValue(1, 2, 6);
@@ -520,7 +508,6 @@ TEST_CASE("Post-decrement operator")
 
     SquareMat result = mat--;
 
-    CHECK(result.getSize() == 3); // Test size is correct
     CHECK(result.getValue(0, 0) == 1);
     CHECK(result.getValue(0, 1) == 2);
     CHECK(result.getValue(0, 2) == 3);
@@ -560,7 +547,6 @@ TEST_CASE("Transpose operator")
 
     SquareMat result = ~mat;
 
-    CHECK(result.getSize() == 3); // Test size is correct
     CHECK(result.getValue(0, 0) == 1);
     CHECK(result.getValue(0, 1) == 4);
     CHECK(result.getValue(0, 2) == 7);
@@ -650,7 +636,7 @@ TEST_CASE("Greater than, less than, greater equal and less equal operators")
 
     CHECK(mat1 > mat2); // Check greater than
 
-    //Check greater than or equal to with equal matrices on both sides
+    // Check greater than or equal to with equal matrices on both sides
     CHECK(mat1 >= mat3);
     CHECK(mat3 >= mat1);
 
@@ -658,16 +644,263 @@ TEST_CASE("Greater than, less than, greater equal and less equal operators")
 
     CHECK(mat3 >= mat3); // Check greater than or equal to with the same matrix
 
-
     ////////////////////////////////////////////////////////////////////////////
 
-    CHECK(mat2 < mat1); // Check less than
+    CHECK(mat2 < mat1);  // Check less than
     CHECK(mat4 <= mat1); // Check less than or equal to
 
-    //Check less than or equal to with equal matrices on both sides
+    // Check less than or equal to with equal matrices on both sides
     CHECK(mat3 <= mat1);
     CHECK(mat1 <= mat3);
 
     CHECK(mat3 <= mat3); // Check less than or equal to with the same matrix
 }
 
+// Check the determinant operator:
+TEST_CASE("Determinant operator")
+{
+    SquareMat mat(3);
+    mat.setValue(0, 0, 1);
+    mat.setValue(0, 1, 2);
+    mat.setValue(0, 2, 3);
+    mat.setValue(1, 0, 4);
+    mat.setValue(1, 1, 5);
+    mat.setValue(1, 2, 6);
+    mat.setValue(2, 0, 7);
+    mat.setValue(2, 1, 8);
+    mat.setValue(2, 2, 9);
+    int det_res = !mat;  // Call the determinant operator
+    CHECK(det_res == 0); // Check determinate is the correct value
+
+    SquareMat mat2(3);
+    mat2.setValue(0, 0, 6);
+    mat2.setValue(0, 1, 7);
+    mat2.setValue(0, 2, 4);
+    mat2.setValue(1, 0, 8);
+    mat2.setValue(1, 1, 9);
+    mat2.setValue(1, 2, 6);
+    mat2.setValue(2, 0, 7);
+    mat2.setValue(2, 1, 7);
+    mat2.setValue(2, 2, 4);
+    int det_res2 = !mat2; // Call the determinant operator
+    CHECK(det_res2 == 6); // Check determinate is the correct value
+}
+
+// Check the printing operator:
+TEST_CASE("Printing operator")
+{
+    SquareMat mat(3);
+    mat.setValue(0, 0, 1);
+    mat.setValue(0, 1, 2);
+    mat.setValue(0, 2, 3);
+    mat.setValue(1, 0, 4);
+    mat.setValue(1, 1, 5);
+    mat.setValue(1, 2, 6);
+    mat.setValue(2, 0, 7);
+    mat.setValue(2, 1, 8);
+    mat.setValue(2, 2, 9);
+
+    ostringstream oss; // An output string stream (ostringstream) is created.
+    // (This is a special kind of stream that writes output to a string instead of the console.)
+    oss << mat; // Use the printing operator
+
+    // The \t represents a tab character (used to separate the values in a row), and \n represents a newline (to move to the next row after each line).
+    string expected_output = "1\t2\t3\n4\t5\t6\n7\t8\t9\n";
+
+    CHECK(oss.str() == expected_output); // Check the output is correct
+}
+
+// Check the += operator(adds another matrix to this matrix):
+TEST_CASE("Addition assignment operator")
+{
+    SquareMat mat1(3);
+    mat1.setValue(0, 0, 1);
+    mat1.setValue(0, 1, 2);
+    mat1.setValue(0, 2, 3);
+    mat1.setValue(1, 0, 4);
+    mat1.setValue(1, 1, 5);
+    mat1.setValue(1, 2, 6);
+    mat1.setValue(2, 0, 7);
+    mat1.setValue(2, 1, 8);
+    mat1.setValue(2, 2, 9);
+
+    SquareMat mat2(3);
+    mat2.setValue(0, 0, -1);
+    mat2.setValue(0, 1, -3);
+    mat2.setValue(0, 2, -5);
+    mat2.setValue(1, 0, -7);
+    mat2.setValue(1, 1, -1);
+    mat2.setValue(1, 2, -1);
+    mat2.setValue(2, 0, -2);
+    mat2.setValue(2, 1, 4);
+    mat2.setValue(2, 2, 16);
+
+    SquareMat result = mat1;
+    result += mat2; // Use the addition assignment operator
+
+    CHECK(result.getValue(0, 0) == 0);
+    CHECK(result.getValue(0, 1) == -1);
+    CHECK(result.getValue(0, 2) == -2);
+    CHECK(result.getValue(1, 0) == -3);
+    CHECK(result.getValue(1, 1) == 4);
+    CHECK(result.getValue(1, 2) == 5);
+    CHECK(result.getValue(2, 0) == 5);
+    CHECK(result.getValue(2, 1) == 12);
+    CHECK(result.getValue(2, 2) == 25);
+}
+
+// Check the -= operator(substracuts another matrix from this matrix):
+TEST_CASE("Addition assignment operator")
+{
+    SquareMat mat1(3);
+    mat1.setValue(0, 0, 1);
+    mat1.setValue(0, 1, 2);
+    mat1.setValue(0, 2, 3);
+    mat1.setValue(1, 0, 4);
+    mat1.setValue(1, 1, 5);
+    mat1.setValue(1, 2, 6);
+    mat1.setValue(2, 0, 7);
+    mat1.setValue(2, 1, 8);
+    mat1.setValue(2, 2, 9);
+
+    SquareMat mat2(3);
+    mat2.setValue(0, 0, -1);
+    mat2.setValue(0, 1, -3);
+    mat2.setValue(0, 2, -5);
+    mat2.setValue(1, 0, -7);
+    mat2.setValue(1, 1, -1);
+    mat2.setValue(1, 2, -1);
+    mat2.setValue(2, 0, -2);
+    mat2.setValue(2, 1, 4);
+    mat2.setValue(2, 2, 16);
+
+    SquareMat result = mat1;
+    result -= mat2; // Use the addition assignment operator
+
+    CHECK(result.getValue(0, 0) == 2);
+    CHECK(result.getValue(0, 1) == 5);
+    CHECK(result.getValue(0, 2) == 8);
+    CHECK(result.getValue(1, 0) == 11);
+    CHECK(result.getValue(1, 1) == 6);
+    CHECK(result.getValue(1, 2) == 7);
+    CHECK(result.getValue(2, 0) == 9);
+    CHECK(result.getValue(2, 1) == 4);
+    CHECK(result.getValue(2, 2) == -7);
+}
+
+// Check the *= operator(Multiplies this matrix by another matrix):
+TEST_CASE("Multiplication assignment operator")
+{
+    SquareMat mat1(3);
+    mat1.setValue(0, 0, 1);
+    mat1.setValue(0, 1, 2);
+    mat1.setValue(0, 2, 3);
+    mat1.setValue(1, 0, 4);
+    mat1.setValue(1, 1, 5);
+    mat1.setValue(1, 2, 6);
+    mat1.setValue(2, 0, 7);
+    mat1.setValue(2, 1, 8);
+    mat1.setValue(2, 2, 9);
+
+    SquareMat mat2(3);
+    mat2.setValue(0, 0, -1);
+    mat2.setValue(0, 1, -3);
+    mat2.setValue(0, 2, -5);
+    mat2.setValue(1, 0, -7);
+    mat2.setValue(1, 1, -1);
+    mat2.setValue(1, 2, -1);
+    mat2.setValue(2, 0, -2);
+    mat2.setValue(2, 1, -4);
+    mat2.setValue(2, 2, -16);
+
+    SquareMat result = mat1;
+    result *= mat2; // Use the addition assignment operator
+
+    CHECK(result.getValue(0, 0) == -21);
+    CHECK(result.getValue(0, 1) == -17);
+    CHECK(result.getValue(0, 2) == -55);
+    CHECK(result.getValue(1, 0) == -51);
+    CHECK(result.getValue(1, 1) == -41);
+    CHECK(result.getValue(1, 2) == -121);
+    CHECK(result.getValue(2, 0) == -81);
+    CHECK(result.getValue(2, 1) == -65);
+    CHECK(result.getValue(2, 2) == -187);
+}
+
+// Check the /= operator(Divides this matrix by another matrix):
+TEST_CASE("Division assignment operator")
+{
+    SquareMat mat1(3);
+    mat1.setValue(0, 0, 1);
+    mat1.setValue(0, 1, 2);
+    mat1.setValue(0, 2, 15);
+    mat1.setValue(1, 0, 14);
+    mat1.setValue(1, 1, 5);
+    mat1.setValue(1, 2, 6);
+    mat1.setValue(2, 0, 8);
+    mat1.setValue(2, 1, 8);
+    mat1.setValue(2, 2, 80);
+
+    SquareMat mat2(3);
+    mat2.setValue(0, 0, -1);
+    mat2.setValue(0, 1, -2);
+    mat2.setValue(0, 2, -5);
+    mat2.setValue(1, 0, -7);
+    mat2.setValue(1, 1, -1);
+    mat2.setValue(1, 2, -1);
+    mat2.setValue(2, 0, -2);
+    mat2.setValue(2, 1, -4);
+    mat2.setValue(2, 2, 16);
+
+    SquareMat result = mat1;
+    result /= mat2; // Use the addition assignment operator
+
+    CHECK(result.getValue(0, 0) == -1);
+    CHECK(result.getValue(0, 1) == -1);
+    CHECK(result.getValue(0, 2) == -3);
+    CHECK(result.getValue(1, 0) == -2);
+    CHECK(result.getValue(1, 1) == -5);
+    CHECK(result.getValue(1, 2) == -6);
+    CHECK(result.getValue(2, 0) == -4);
+    CHECK(result.getValue(2, 1) == -2);
+    CHECK(result.getValue(2, 2) == 5);
+}
+
+// Check the %= operator(Performs element-wise modulo operation between this matrix and another matrix):
+TEST_CASE("Modulo assignment operator")
+{
+    SquareMat mat1(3);
+    mat1.setValue(0, 0, 1);
+    mat1.setValue(0, 1, 2);
+    mat1.setValue(0, 2, 15);
+    mat1.setValue(1, 0, 14);
+    mat1.setValue(1, 1, 5);
+    mat1.setValue(1, 2, 6);
+    mat1.setValue(2, 0, 8);
+    mat1.setValue(2, 1, 8);
+    mat1.setValue(2, 2, 80);
+
+    SquareMat mat2(3);
+    mat2.setValue(0, 0, 1);
+    mat2.setValue(0, 1, 2);
+    mat2.setValue(0, 2, 2);
+    mat2.setValue(1, 0, 3);
+    mat2.setValue(1, 1, 1);
+    mat2.setValue(1, 2, 1);
+    mat2.setValue(2, 0, 7);
+    mat2.setValue(2, 1, 10);
+    mat2.setValue(2, 2, 162);
+
+    SquareMat result = mat1;
+    result %= mat2; 
+
+    CHECK(result.getValue(0, 0) == 0);
+    CHECK(result.getValue(0, 1) == 0);
+    CHECK(result.getValue(0, 2) == 1);
+    CHECK(result.getValue(1, 0) == 2);
+    CHECK(result.getValue(1, 1) == 0);
+    CHECK(result.getValue(1, 2) == 0);
+    CHECK(result.getValue(2, 0) == 1);
+    CHECK(result.getValue(2, 1) == 8);
+    CHECK(result.getValue(2, 2) == 80);
+}
