@@ -827,7 +827,7 @@ TEST_CASE("Multiplication assignment operator")
     CHECK(result.getValue(2, 2) == -187);
 }
 
-// Check the /= operator(Divides this matrix by another matrix):
+// Check the matrix version of the /= operator(Divides this matrix by another matrix):
 TEST_CASE("Division assignment operator")
 {
     SquareMat mat1(3);
@@ -866,7 +866,7 @@ TEST_CASE("Division assignment operator")
     CHECK(result.getValue(2, 2) == 5);
 }
 
-// Check the %= operator(Performs element-wise modulo operation between this matrix and another matrix):
+// Check the matrix version of the %= operator(Performs element-wise modulo operation between this matrix and another matrix):
 TEST_CASE("Modulo assignment operator")
 {
     SquareMat mat1(3);
@@ -903,4 +903,52 @@ TEST_CASE("Modulo assignment operator")
     CHECK(result.getValue(2, 0) == 1);
     CHECK(result.getValue(2, 1) == 8);
     CHECK(result.getValue(2, 2) == 80);
+}
+
+// Check the scalar version of the /= operator(divides this matrix by a scalar):
+TEST_CASE("Division assignment operator with scalar")
+{
+    SquareMat mat(3);
+    mat.setValue(0, 0, 2);
+    mat.setValue(1, 1, -4);
+    mat.setValue(2, 2, 6.222);
+
+    SquareMat result = mat;
+    result /= 2; // Use the division assignment operator
+
+    CHECK(result.getValue(0, 0) == 1);
+    CHECK(result.getValue(1, 1) == -2);
+    CHECK(result.getValue(2, 2) == 3.111);
+
+    // Make sure all other values are still 0
+    CHECK(result.getValue(0, 1) == 0);
+    CHECK(result.getValue(0, 2) == 0);
+    CHECK(result.getValue(1, 0) == 0);
+    CHECK(result.getValue(1, 2) == 0);
+    CHECK(result.getValue(2, 0) == 0);
+    CHECK(result.getValue(2, 1) == 0);
+}
+
+// Check the scalar version of the %= operator(apllies element wise modulo between this matrix and a scalar):
+TEST_CASE("Modulo assignment operator with scalar")
+{
+    SquareMat mat(3);
+    mat.setValue(0, 0, 2);
+    mat.setValue(1, 1, -4.5);
+    mat.setValue(2, 2, 6.000);
+
+    SquareMat result = mat;
+    result %= 2; // Use the modulo assignment operator
+
+    CHECK(result.getValue(0, 0) == 0);
+    CHECK(result.getValue(1, 1) == -0.5);
+    CHECK(result.getValue(2, 2) == 0);
+
+    // Make sure all other values are still 0
+    CHECK(result.getValue(0, 1) == 0);
+    CHECK(result.getValue(0, 2) == 0);
+    CHECK(result.getValue(1, 0) == 0);
+    CHECK(result.getValue(1, 2) == 0);
+    CHECK(result.getValue(2, 0) == 0);
+    CHECK(result.getValue(2, 1) == 0);
 }

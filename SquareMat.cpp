@@ -146,12 +146,12 @@ void SquareMat::printMatrix(ostream &os) const
 }
 
 // Helper function to check for double equality:
-bool SquareMat::isEqual(double a, double b) 
+bool SquareMat::isEqual(double a, double b)
 {
     return myAbs(a - b) < TOLERANCE;
 }
 // Helper function to calculate absolute value:
-double SquareMat::myAbs(double value) 
+double SquareMat::myAbs(double value)
 {
     return (value < 0) ? -value : value;
 }
@@ -649,13 +649,42 @@ SquareMat &SquareMat::operator%=(const SquareMat &other_sm)
     }
 
     // Perform element-wise modulo operation
-    for (int i = 0; i < n; ++i) 
+    for (int i = 0; i < n; ++i)
     {
-        for (int j = 0; j < n; ++j) 
+        for (int j = 0; j < n; ++j)
         {
             this->data[i][j] = fmod(this->data[i][j], other_sm.data[i][j]);
         }
     }
 
+    return *this;
+}
+
+SquareMat& SquareMat::operator/=(double scalar)
+{
+    if (scalar == 0)
+    {
+        throw "Division by zero.";
+    }
+
+    for (int i = 0; i < this->n; i++)
+    {
+        for (int j = 0; j < this->n; j++)
+        {
+            this->data[i][j] /= scalar;
+        }
+    }
+    return *this;
+}
+
+SquareMat& SquareMat::operator%=(double scalar)
+{
+    for (int i = 0; i < this->n; i++)
+    {
+        for (int j = 0; j < this->n; j++)
+        {
+            this->data[i][j] = fmod(this->data[i][j], scalar);
+        }
+    }
     return *this;
 }
