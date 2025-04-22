@@ -26,6 +26,16 @@ int main()
     cout << mat1; // Print using overloaded operator <<
     cout << "-----------------------------------------------------------:" << endl;
 
+    // Print the vector of a row:
+    cout << "Row 1 of Matrix 1(using the overloaded operator []):" << endl;
+    SquareMat::RowProxy row1 = mat1[1]; // Get the RowProxy for row 1
+    for (int j = 0; j < mat1.getSize(); j++)
+    {
+        cout << row1[j] << "\t"; // Print the values of the row
+    }
+    cout << endl;
+    cout << "-----------------------------------------------------------:" << endl;
+
 
 
     return 0;

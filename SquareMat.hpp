@@ -14,6 +14,42 @@ namespace mat_ns
         double **data;
 
     public:
+        // Proxy classes for 2D bounds-checked access:
+        class RowProxy
+        {
+        private:
+            double *row;
+            int size;
+
+        public:
+            RowProxy(double *r, int s) : row(r), size(s) {} // Initializer list constructor
+
+            double &operator[](int j)
+            {
+                if (j < 0 || j >= size)
+                    throw "Column index out of bounds.";
+                return row[j];
+            }
+        };
+
+        class ConstRowProxy
+        {
+        private:
+            const double *row;
+            int size;
+
+        public:
+            ConstRowProxy(const double *r, int s) : row(r), size(s) {} // Initializer list constructor
+
+            const double &operator[](int j) const
+            {
+                if (j < 0 || j >= size)
+                    throw "Column index out of bounds.";
+                return row[j];
+            }
+        };
+
+    public:
         SquareMat(int dimension); // Constructor
 
         // Rule of 3:
@@ -53,8 +89,8 @@ namespace mat_ns
         SquareMat &operator--();                                          // Pre-decrement operator: decrement each element in the matrix by 1
         SquareMat operator--(int);                                        // Post-decrement operator: decrement each element in the matrix by 1
         SquareMat operator~() const;                                      // Transpose operator: transpose the matrix
-        double *operator[](int i);                                        // For write access (non-const)
-        const double *operator[](int i) const;                            // For read-only access (const objects)
+        RowProxy operator[](int i);                                       // For write access
+        ConstRowProxy operator[](int i) const;                            // For read-only access
         bool operator==(const SquareMat &other_sm) const;                 // Equality operator: checks if two matrices are equal
         bool operator!=(const SquareMat &other_sm) const;                 // Inequality operator: checks if two matrices are not equal
         bool operator>(const SquareMat &other_sm) const;                  // Greater than operator: checks if the sum of elements in this matrix is greater than the other matrix
@@ -67,11 +103,11 @@ namespace mat_ns
         SquareMat &operator-=(const SquareMat &other_sm);                 // Subtracts another matrix from this matrix
         SquareMat &operator*=(const SquareMat &other);                    // Multiplies this matrix by another matrix
         // Matrix version:
-        SquareMat &operator/=(const SquareMat &other);                    // Divides this matrix by another matrix
-        SquareMat &operator%=(const SquareMat &other);                    // Applies element-wise modulo operation between this matrix and another matrix
+        SquareMat &operator/=(const SquareMat &other); // Divides this matrix by another matrix
+        SquareMat &operator%=(const SquareMat &other); // Applies element-wise modulo operation between this matrix and another matrix
         // Scalar version:
-        SquareMat &operator/=(double scalar);                             // Divides this matrix by a scalar
-        SquareMat &operator%=(double scalar);                             // Applies element-wise modulo operation between this matrix and a scalar
+        SquareMat &operator/=(double scalar); // Divides this matrix by a scalar
+        SquareMat &operator%=(double scalar); // Applies element-wise modulo operation between this matrix and a scalar
     };
     SquareMat operator*(double scalar, const SquareMat &matrix); // Non-member function to multiply by a scalar (scalar * matrix)
 }

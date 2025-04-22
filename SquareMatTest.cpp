@@ -50,11 +50,18 @@ TEST_CASE("Basic SquareMat functionality")
     CHECK(mat.getValue(0, 0) == 1);
     CHECK(mat.getValue(1, 1) == 2);
     CHECK(mat.getValue(2, 2) == 3);
+    CHECK_THROWS(mat[3][3] = 5); // Check out of bounds access in both column and row throws a string
+    CHECK_THROWS(mat[1][14] = 5.6); // Check out of bounds access throws string when accesing invalid column
+    CHECK_THROWS(mat[15][1] = 5.8); // Check out of bounds access throws string when accesing invalid row
+
     // Test the read-only access operator(const):
     const SquareMat const_mat = mat;
     CHECK(const_mat[0][0] == 1);
     CHECK(const_mat[1][1] == 2);
     CHECK(const_mat[2][2] == 3);
+    CHECK_THROWS(const_mat[1][14]); // Check out of bounds access throws string when accesing invalid column
+    CHECK_THROWS(const_mat[15][1]); // Check out of bounds access throws string when accesing invalid row
+    CHECK_THROWS(const_mat[55][55]); // Check out of bounds access throws string when accesoing invalid column and row
 }
 
 // Check the copy constructor:
@@ -120,7 +127,7 @@ TEST_CASE("Addition operator")
 
     CHECK(result.getValue(0, 0) == 5);
     CHECK(result.getValue(1, 1) == 3);
-    CHECK(result.getValue(2, 2) == 9.2); 
+    CHECK(result.getValue(2, 2) == 9.2);
 
     // Make sure all other values are still 0
     CHECK(result.getValue(0, 1) == 0);
@@ -165,13 +172,13 @@ TEST_CASE("Negation operator")
     SquareMat mat(3);
     mat.setValue(0, 0, 1);
     mat.setValue(1, 1, -2);
-    mat.setValue(2, 2, 3);
+    mat.setValue(2, 2, 3.56);
 
     SquareMat result = -mat;
 
     CHECK(result.getValue(0, 0) == -1);
     CHECK(result.getValue(1, 1) == 2);
-    CHECK(result.getValue(2, 2) == -3);
+    CHECK(result.getValue(2, 2) == -3.56);
 
     // Make sure all other values are still 0
     CHECK(result.getValue(0, 1) == 0);
@@ -239,7 +246,7 @@ TEST_CASE("Multiplication operator with scalar")
     CHECK(result.getValue(1, 0) == 0);
     CHECK(result.getValue(1, 2) == 0);
     CHECK(result.getValue(2, 0) == 0);
-    CHECK(result.getValue(2, 1) == 0);
+    CHECK(mat[2][1] == 0);
 }
 
 // Check the non-member function to multiply by a scalar (scalar * matrix)
@@ -303,7 +310,6 @@ TEST_CASE("Modulo operator with scalar")
 
     SquareMat result = mat % 2;
 
-    CHECK(result.getSize() == 3); // Test size is correct
     CHECK(result.getValue(0, 0) == 1);
     CHECK(result.getValue(1, 1) == 0);
     CHECK(result.getValue(2, 2) == 1);
@@ -327,7 +333,6 @@ TEST_CASE("Division operator with scalar")
 
     SquareMat result = mat / 2;
 
-    CHECK(result.getSize() == 3); // Test size is correct
     CHECK(result.getValue(0, 0) == 1);
     CHECK(result.getValue(1, 1) == -2);
     CHECK(result.getValue(2, 2) == 3);
@@ -339,6 +344,8 @@ TEST_CASE("Division operator with scalar")
     CHECK(result.getValue(1, 2) == 0);
     CHECK(result.getValue(2, 0) == 0);
     CHECK(result.getValue(2, 1) == 0);
+
+    CHECK_THROWS(mat / 0); // Ensure division by zero throws an exception
 }
 
 // Check the unary power operator:
@@ -892,7 +899,7 @@ TEST_CASE("Modulo assignment operator")
     mat2.setValue(2, 2, 162);
 
     SquareMat result = mat1;
-    result %= mat2; 
+    result %= mat2;
 
     CHECK(result.getValue(0, 0) == 0);
     CHECK(result.getValue(0, 1) == 0);

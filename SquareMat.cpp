@@ -409,26 +409,16 @@ SquareMat SquareMat::operator~() const
     return result;
 }
 
-// Non-const version: allows modification:
-double *SquareMat::operator[](int i)
+SquareMat::RowProxy SquareMat::operator[](int i) 
 {
-    // Check if the index is within bounds:
-    if (i < 0 || i >= n)
-    {
-        throw "Index out of bounds.";
-    }
-    return data[i]; // returns a pointer to the i-th row
+    if (i < 0 || i >= n) throw "Row index out of bounds";
+    return RowProxy(data[i], n);
 }
 
-// Const version: only allows reading:
-const double *SquareMat::operator[](int i) const
+SquareMat::ConstRowProxy SquareMat::operator[](int i) const 
 {
-    // Check if the index is within bounds:
-    if (i < 0 || i >= n)
-    {
-        throw "Index out of bounds.";
-    }
-    return data[i]; // returns a const pointer for const objects
+    if (i < 0 || i >= n) throw "Row index out of bounds";
+    return ConstRowProxy(data[i], n);
 }
 
 // Function to check if two matrices are equal:
@@ -688,3 +678,4 @@ SquareMat& SquareMat::operator%=(double scalar)
     }
     return *this;
 }
+
