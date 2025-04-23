@@ -136,6 +136,36 @@ TEST_CASE("Addition operator")
     CHECK(result.getValue(1, 2) == 0);
     CHECK(result.getValue(2, 0) == 0);
     CHECK(result.getValue(2, 1) == 0);
+
+    // Check addition with matrices of two different dimension:
+    SquareMat mat3(5);
+    mat3.setValue(0, 0, 22);
+    mat3.setValue(0, 1, -2);
+    mat3.setValue(0, 2, 3.1);
+    mat3.setValue(0, 3, 4);
+    mat3.setValue(0, 4, 3434);
+    mat3.setValue(1, 0, 543);
+    mat3.setValue(1, 1, 2);
+    mat3.setValue(1, 2, 3);
+    mat3.setValue(1, 3, 433);
+    mat3.setValue(1, 4, 443);
+    mat3.setValue(2, 0, 1);
+    mat3.setValue(2, 1, 23);
+    mat3.setValue(2, 2, 0.4);
+    mat3.setValue(2, 3, 12);
+    mat3.setValue(2, 4, 0.5);
+    mat3.setValue(3, 0, 2);
+    mat3.setValue(3, 1, 23.73);
+    mat3.setValue(3, 2, 0.4);
+    mat3.setValue(3, 3, 12);
+    mat3.setValue(3, 4, 0.5);
+    mat3.setValue(4, 0, 2);
+    mat3.setValue(4, 1, 23.73);
+    mat3.setValue(4, 2, 0.4);
+    mat3.setValue(4, 3, 12);
+    mat3.setValue(4, 4, 0.5);
+    CHECK_THROWS(mat1 + mat3); // Check addition with matrices of different dimensions throws an exception
+
 }
 
 // Check the subtraction operator:
@@ -164,6 +194,10 @@ TEST_CASE("Subtraction operator")
     CHECK(result.getValue(1, 2) == 0);
     CHECK(result.getValue(2, 0) == 0);
     CHECK(result.getValue(2, 1) == 0);
+
+    // Check subtraction with matrices of two different dimension:
+    SquareMat mat3(5); // We do not set the values bacause the deafult is a matrix with zeros in all of its elements
+    CHECK_THROWS(mat1 - mat3); // Check subtraction with matrices of different dimensions throws an exception
 }
 
 // Check the negation operator:
@@ -224,9 +258,14 @@ TEST_CASE("Multiplication operator")
     CHECK(result.getValue(2, 0) == 102);
     CHECK(result.getValue(2, 1) == 126);
     CHECK(result.getValue(2, 2) == 150);
+
+    // Check multiplication with matrices of two different dimension:
+    SquareMat mat3(15);
+    CHECK_THROWS(mat1 * mat3); // Check multiplication with matrices of different dimensions throws an exception
+
 }
 
-// Check the multiplication operator with scalar:
+// Check the multiplication operator with scalar(matrix * scalar):
 TEST_CASE("Multiplication operator with scalar")
 {
     SquareMat mat(3);
