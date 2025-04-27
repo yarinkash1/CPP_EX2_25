@@ -45,11 +45,34 @@ make test
 
 ## Features
 
-- Operator overloads: `+`, `-`, `*`, `%`, `/`, `^`, `++`, `--`, `~`, `[]`, `==`, `!=`, `>`, `<`, `<=`, `>=`, `!`, `<<`, `+=`, `-=`, `*=` and `/=`.
+- Operator overloads: `+`, `-`, `*`, `%`, `/`, `^`, `++`, `--`, `~`, `[]`, `==`, `!=`, `>`, `<`, `<=`, `>=`, `!`, `<<`, `+=`, `-=`, `*=`, `%=` and `/=`.
 *note: some operators can have more than one purpose(different function signature).
 - Scalar and matrix operations
 - Rule of 3 implemented: destructor, copy constructor, and assignment operator
 - Unit tests using doctest framework
+
+## Operator Overloads Explanation
+
+This project overloads a variety of operators to provide natural syntax for matrix operations:
+
+#### Arithmetic Operations
+- `+`, `-`, `*`, `/`: Matrix addition, subtraction, multiplication, and division by a scalar or another matrix (when applicable).
+- `%`: Modulus operation on each element (element-wise).
+- `^`: Matrix exponentiation (raising a matrix to an integer power).
+- `+=`, `-=`, `*=`, `/=`, `%=`: In-place arithmetic operations(`/=` and `%=` have both matrix and scalar versions).
+
+#### Unary Operations
+- `++`, `--`: Element-wise increment and decrement (prefix and postfix versions).
+- `~`: Transpose of the matrix.
+- `!`: Calculate the determinant of a matrix.
+
+#### Comparison Operators
+- `==`, `!=`: Compare matrices for equality or inequality (with floating point tolerance - see notes below).
+- `>`, `<`, `>=`, `<=`: Compare matrices based on their elements total sum.
+
+#### Other Operators
+- `[]`: Access elements by index.
+- `<<`: Stream output to easily print matrices.
 
 ## Notes
 - Tolerance for float equality is set to `1e-6`.
